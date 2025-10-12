@@ -1,0 +1,32 @@
+# Cybersecurity Log Analyzer - Requirements
+
+# Core ML/AI
+transformers
+torch
+scikit-learn
+langchain
+
+# Data processing
+pandas
+numpy
+
+# CLI and dashboard (optional for MVP)
+streamlit
+
+# Utility
+python-dateutil
+
+# For progress bars/logging
+rich
+
+# For parsing YAML/JSON (if needed)
+pyyaml
+
+# For Hugging Face model downloads
+huggingface_hub
+
+# For NLP
+nltk
+
+# For type hints (optional)
+typing-extensions
