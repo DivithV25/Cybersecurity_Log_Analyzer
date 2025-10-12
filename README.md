@@ -98,6 +98,3 @@ Enable the LLM interface in `app.py` to ask questions like:
 - Automated incident response
 
 ---
-
-## License
-MIT
