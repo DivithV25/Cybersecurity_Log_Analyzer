@@ -1,5 +1,8 @@
-Oct 11 10:32:21 server1 sshd[1234]: Failed password for invalid user admin from 192.168.0.23
-Oct 11 10:32:23 server1 sshd[1234]: Failed password for invalid user admin from 192.168.0.23
-Oct 11 10:32:24 server1 sshd[1234]: Failed password for invalid user admin from 192.168.0.23
-Oct 11 10:32:25 server1 sshd[1234]: Failed password for invalid user admin from 192.168.0.23
-Oct 11 10:32:27 server1 sshd[1234]: Failed password for invalid user admin from 192.168.0.23
+Oct 11 03:00:01 server1 kernel: [    0.000000] Booting Linux
+Oct 11 03:00:05 server1 systemd[1]: Startup finished in 1.234s
+Oct 11 03:03:10 server1 kernel: [    0.000000] Booting Linux
+Oct 11 03:03:12 server1 systemd[1]: Startup finished in 1.100s
+Oct 11 03:06:20 server1 kernel: [    0.000000] Booting Linux
+Oct 11 03:06:22 server1 systemd[1]: Startup finished in 1.050s
+Oct 11 03:09:30 server1 kernel: [    0.000000] Booting Linux
+Oct 11 03:09:33 server1 systemd[1]: Startup finished in 0.980s

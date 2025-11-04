@@ -54,12 +54,52 @@ class LogDataPipeline:
     def extract_features(self, entry: Dict) -> Dict:
         msg = (entry.get('message') or '')
         ip_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', msg)
+        # sudo line pattern: "sudo:    alice : TTY=pts/1 ; PWD=/home/alice ; USER=root ; COMMAND=/bin/su -"
+        sudo_re = re.compile(r"sudo:\s*(?P<performer>[\w-]+)\s*:\s*.*USER=(?P<target>[\w-]+)\s*;\s*COMMAND=(?P<cmd>.+)", flags=re.IGNORECASE)
+        su_re = re.compile(r"su\[\d+\]: (?P<msg>.+)")
         user_match = re.search(r'user ([\w-]+)', msg, flags=re.IGNORECASE)
-        event = 'failed login' if 'failed password' in msg.lower() or 'failed login' in msg.lower() else 'other'
+        accepted_re = re.compile(r'Accepted password for (?P<user>[\w-]+)', flags=re.IGNORECASE)
+        msg_l = msg.lower()
+        # classify event: failed/accepted login, reboot, or other
+        if 'failed password' in msg_l or 'failed login' in msg_l:
+            event = 'failed login'
+        elif 'accepted password' in msg_l or ('accepted' in msg_l and 'password' in msg_l):
+            event = 'accepted login'
+        elif 'booting' in msg_l or 'startup finished' in msg_l or ('boot' in msg_l and 'linux' in msg_l) or 'reboot' in msg_l or 'restart' in msg_l:
+            event = 'reboot'
+        else:
+            event = 'other'
+
+        performer = None
+        target_user = None
+        command = None
+        m = sudo_re.search(msg)
+        if m:
+            performer = m.group('performer')
+            target_user = m.group('target')
+            command = m.group('cmd').strip()
+        else:
+            # try to parse typical su messages
+            m2 = re.search(r'for user (?P<target>[\w-]+)', msg, flags=re.IGNORECASE)
+            if m2:
+                target_user = m2.group('target')
+
+        # if performer absent, use user_match as performer
+        if performer is None:
+            # prefer explicit Accepted login user
+            m_acc = accepted_re.search(msg)
+            if m_acc:
+                performer = m_acc.group('user')
+                event = 'accepted login'
+            elif user_match:
+                performer = user_match.group(1)
+
         return {
             **entry,
             'ip': ip_match.group(1) if ip_match else None,
-            'user': user_match.group(1) if user_match else None,
+            'user': performer,
+            'target_user': target_user,
+            'command': command,
             'event': event,
         }
 

@@ -40,20 +40,43 @@ class AlertEngine:
 
     def detect_privilege_escalation(self, df: pd.DataFrame):
         alerts = []
-        if 'event' not in df.columns or 'user' not in df.columns or 'message' not in df.columns:
+        # Use parsed fields to detect privilege escalation more robustly.
+        if 'message' not in df.columns:
             return alerts
-        priv = df[df['message'].str.contains('root|sudo|admin', case=False, na=False)]
-        for _, row in priv.iterrows():
-            if 'privilege' in row['message'] or 'escalation' in row['message']:
+
+        for _, row in df.iterrows():
+            msg = (row.get('message') or '').lower()
+            user = row.get('user') or None
+            target = row.get('target_user') if 'target_user' in row.index else None
+            command = row.get('command') if 'command' in row.index else None
+
+            is_priv_cmd = False
+
+            # explicit target to root (sudo USER=root ...)
+            if target and str(target).lower() == 'root':
+                is_priv_cmd = True
+
+            # sudo/su keyword usage in message
+            if not is_priv_cmd and ('sudo' in msg or ' su ' in msg or msg.startswith('su[')):
+                is_priv_cmd = True
+
+            # suspicious commands that operate on /root or generate keys in root
+            if not is_priv_cmd and command:
+                cmd_l = str(command).lower()
+                if '/root' in cmd_l or 'genrsa' in cmd_l or 'openssl' in cmd_l:
+                    is_priv_cmd = True
+
+            if is_priv_cmd:
                 alerts.append({
                     "timestamp": row['timestamp'].isoformat() if pd.notnull(row['timestamp']) else None,
                     "alert_type": "Privilege Escalation",
-                    "user": row['user'],
+                    "user": user,
                     "ip": row.get('ip', None),
                     "count": 1,
                     "severity": "Critical",
-                    "message": f"Privilege escalation detected for user {row['user']}"
+                    "message": f"Privilege escalation detected for user {user or 'unknown'}"
                 })
+
         return alerts
 
     def detect_suspicious_access_time(self, df: pd.DataFrame, work_hours=(7, 20)):
