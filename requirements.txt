@@ -30,3 +30,8 @@ nltk
 
 # For type hints (optional)
 typing-extensions
+
+# Web API for frontend integration
+fastapi
+uvicorn[standard]
+python-multipart
