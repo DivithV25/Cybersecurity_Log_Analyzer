@@ -120,6 +120,10 @@ class LogDataPipeline:
                     continue
                 parsed['message'] = self.clean_message(parsed.get('message', ''))
                 features = self.extract_features(parsed)
+                # Include the original parsed data (timestamp, host, process, message, raw)
+                for key in ['timestamp', 'host', 'process', 'message', 'raw']:
+                    if key not in features and key in parsed:
+                        features[key] = parsed[key]
                 try:
                     features['embedding'] = self.log_to_embedding(features['message'])
                 except Exception:
