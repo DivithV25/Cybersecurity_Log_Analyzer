@@ -26,14 +26,21 @@ class AlertEngine:
             for i in range(len(times) - self.brute_force_threshold + 1):
                 window = times[i:i+self.brute_force_threshold]
                 if (window[-1] - window[0]).total_seconds() <= self.brute_force_window * 60:
+                    # Count actual failed logins in the time window
+                    # Get all failed logins from this IP/user within the brute force window
+                    window_end = window[-1]
+                    window_start = window_end - pd.Timedelta(minutes=self.brute_force_window)
+                    failed_in_window = group[(group['timestamp'] >= window_start) & (group['timestamp'] <= window_end)]
+                    actual_count = len(failed_in_window)
+                    
                     alerts.append({
-                        "timestamp": window[-1].isoformat(),
+                        "timestamp": window_end.isoformat(),
                         "alert_type": "Brute Force",
                         "user": user,
                         "ip": ip,
-                        "count": self.brute_force_threshold,
+                        "count": actual_count,
                         "severity": "High",
-                        "message": f"{self.brute_force_threshold} failed logins detected from IP {ip} for user {user} — possible brute-force attack."
+                        "message": f"{actual_count} failed logins detected from IP {ip} for user {user} — possible brute-force attack."
                     })
                     break
         return alerts

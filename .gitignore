@@ -1,0 +1,74 @@
+## Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+.env
+.venv/
+.venv
+venv/
+ENV/
+build/
+dist/
+eggs/
+*.egg-info/
+pip-wheel-metadata/
+*.egg
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+## VSCode
+.vscode/
+
+## macOS
+.DS_Store
+
+## Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## Node
+node_modules/
+package-lock.json
+yarn.lock
+.next/
+
+## Next.js
+.next/
+out/
+
+## Editor directories and files
+*.sublime-workspace
+*.sublime-project
+.idea/
+*.iml
+
+## Frontend build
+/frontend/.next
+/frontend/node_modules
+
+## Python virtual environments
+/.venv
+
+## Model and cache data
+*.pt
+*.pth
+/.cache
+/huggingface/
+
+## Temporary files
+*.tmp
+*.temp
+~*
+*.swp

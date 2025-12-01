@@ -1,8 +1,0 @@
-Oct 11 03:00:01 server1 kernel: [    0.000000] Booting Linux
-Oct 11 03:00:05 server1 systemd[1]: Startup finished in 1.234s
-Oct 11 03:03:10 server1 kernel: [    0.000000] Booting Linux
-Oct 11 03:03:12 server1 systemd[1]: Startup finished in 1.100s
-Oct 11 03:06:20 server1 kernel: [    0.000000] Booting Linux
-Oct 11 03:06:22 server1 systemd[1]: Startup finished in 1.050s
-Oct 11 03:09:30 server1 kernel: [    0.000000] Booting Linux
-Oct 11 03:09:33 server1 systemd[1]: Startup finished in 0.980s

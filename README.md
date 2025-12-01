@@ -1,7 +1,7 @@
 # Cybersecurity Log Analyzer (MVP)
 
 ## Overview
-An **AI-powered Cybersecurity Log Analyzer MVP** that reads, processes, and analyzes system log files to detect unusual or potentially harmful activities, triggering intelligent alerts using Machine Learning and Generative AI.
+An **AI-powered Cybersecurity Log Analyzer** that reads, processes, and analyzes system log files to detect unusual or potentially harmful activities, triggering intelligent alerts using Machine Learning and Generative AI.
 
 ---
 
